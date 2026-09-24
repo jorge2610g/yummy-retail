@@ -1,6 +1,6 @@
 # Yummy Retail — Contexto y continuidad del proyecto
 
-Última actualización: 2026-09-23 (America/Santiago)
+Última actualización: 2026-09-24 (America/Santiago)
 
 ## Propósito de este archivo
 
@@ -59,23 +59,32 @@ Se está comparando `yummy-retail` contra `yummy-restaurante/panel/index.html` m
 ### Panel base / shell
 
 - La paleta principal del shell Retail conserva los tokens base del panel original: fondo, tarjetas, campos, texto, líneas, amarillo principal y azul activo.
-- El menú lateral Retail usa 234 px en escritorio, coincidiendo con el ancho final aprobado del panel principal.
-- Aún se debe terminar la comparación de todos los breakpoints, estados colapsado/expandido y encabezado.
+- VALIDADO 2026-09-24: el shell de escritorio quedó alineado con el panel aprobado usando sidebar fija de 234 px y contenido a ancho completo.
+- VALIDADO 2026-09-24: se restauró el modo colapsado de escritorio a 68 px, con iconos centrados y estado persistente por navegador.
+- VALIDADO 2026-09-24: el drawer móvil usa la geometría aprobada (izquierda 0, alto completo, ancho máximo 310 px / 86vw) y el botón hamburguesa solo aparece en móvil.
+- Commit de esta corrección: `c4e85681ec618a6c38686efa247a26e7ed81888a`.
 
-### POS Retail — hallazgos confirmados
+### POS Retail — validado y corregido
 
 - El POS separado conserva carrito, caja, historial, descuento, métodos de pago, ticket automático, control de stock y RPC de venta.
 - El sonido de confirmación al escaneo exitoso sigue presente.
 - El ticket automático sigue persistente por negocio y apagado por defecto salvo que el usuario lo active.
-- REGRESIÓN: al entrar al POS separado se hace foco automático en `retailBarcodeInput`; en móvil esto puede abrir el teclado antes que la cámara.
-- REGRESIÓN: desde el escáner, el botón Cobrar actualmente cierra la cámara y abre el modal de cobro aparte. El flujo aprobado del panel original mantiene el cobro dentro de la misma ventana del escáner y permite volver a “Seguir escaneando”.
-- DIFERENCIA VISUAL: `pos.html` usa una paleta/tamaños propios (`--card:#16283c`, `--line:#2b4058`, radios de 22 px, botones y cámara más grandes) que no son idénticos al shell principal aprobado. Debe normalizarse con los tokens del panel base.
+- CORREGIDO: se eliminó el foco automático que podía abrir el teclado antes que la cámara en móvil.
+- CORREGIDO: el cobro vuelve a permanecer integrado dentro de la ventana del escáner y permite “Seguir escaneando” sin perder el carrito.
+- CORREGIDO: colores, radios, controles y tamaños principales del POS se normalizaron con los tokens del panel base.
+- Commit de la corrección: `b67b857da79d3da1149c9be2ad899daf657fbafe`.
 
 ### Productos / escáner aislado
 
-- `scanner.html` sí intenta abrir automáticamente la cámara al crear un producto nuevo cuando el navegador lo permite.
+- `scanner.html` prioriza automáticamente la cámara al crear un producto nuevo cuando el navegador lo permite.
 - Mantiene ingreso manual como respaldo.
-- Aún falta comparar exactamente estilos, galería/foto, campos y responsive contra el módulo Retail del panel original.
+- VALIDADO 2026-09-24: los campos principales coinciden con el módulo Retail aprobado: código de barra, SKU, nombre, marca, categoría, costo, precio, stock, mínimo, unidad, fraccionado, activo e imagen.
+- RESTAURADO 2026-09-24: selección de imagen desde Galería, Tomar foto con cámara y vista previa.
+- RESTAURADO 2026-09-24: subida de imágenes al bucket `restaurant-assets` con validación JPG/PNG/WEBP y máximo 5 MB.
+- RESTAURADO 2026-09-24: lector alternativo con `html5-qrcode` cuando `BarcodeDetector` no está disponible o falla, conservando además el ingreso manual.
+- ALINEADO 2026-09-24: métricas de productos activos, stock bajo y valor de inventario.
+- Commit de estas correcciones: `2dbb4adb30c0caccfaa77bb7695575da24658ee2`.
+- PENDIENTE CONFIRMADO: el módulo original también ofrece carga masiva de catálogo (Excel/CSV/JSON/XML y foto/IA beta); esta función todavía no está migrada a `scanner.html`.
 
 ### Proveedores / compras
 
@@ -99,6 +108,10 @@ No corregir de forma masiva hasta cerrar la comparación del bloque actual. Las 
 - `d2fc9c34966deda31fbd6aec79489b39f1826b49` — ajustar layout desktop Retail.
 - `e43d43b40d34ad2472b07ab35f4bdb2abcafc078` — alinear shell Retail con el panel original aprobado.
 - `778f61056d2bacfabe4957057b95ffeafd7e036c` — crear contexto persistente del proyecto.
+- `58ec7d23a6d36e163529a6f269336b7aed6ec890` — documentar auditoría y regresiones Retail.
+- `b67b857da79d3da1149c9be2ad899daf657fbafe` — corregir flujo scanner-first, cobro integrado y estilos del POS Retail.
+- `c4e85681ec618a6c38686efa247a26e7ed81888a` — alinear shell responsive Retail con el panel aprobado.
+- `2dbb4adb30c0caccfaa77bb7695575da24658ee2` — restaurar fotos de producto y lector compatible alternativo.
 
 ## Comportamientos aprobados que deben conservarse
 
@@ -113,13 +126,11 @@ No corregir de forma masiva hasta cerrar la comparación del bloque actual. Las 
 
 ## Siguiente trabajo recomendado
 
-1. Terminar comparación del shell y breakpoints responsive.
-2. Corregir POS Retail: cámara primero y cobro dentro del escáner.
-3. Normalizar colores, tamaños, radios y controles del POS al panel base.
-4. Comparar productos/escáner aislado campo por campo contra el original.
-5. Comparar proveedores/compras y responsive.
-6. Aplicar el mismo panel base a Profesionales en paralelo, habilitando solo sus módulos correspondientes.
-7. Documentar cada commit antes de cerrar la sesión.
+1. Migrar o cerrar explícitamente la paridad de la carga masiva de catálogo en `scanner.html` (Excel/CSV/JSON/XML y foto/IA beta).
+2. Comparar y normalizar `supply.html` (proveedores/compras) contra el módulo original, incluyendo responsive y componentes.
+3. Validar en HTTPS/dispositivo real cámara nativa, fallback `html5-qrcode`, carga desde Galería/Tomar foto y almacenamiento.
+4. Aplicar el mismo panel base a Profesionales en paralelo, habilitando solo sus módulos correspondientes.
+5. Documentar cada commit antes de cerrar la sesión.
 
 ## Regla de continuidad
 
