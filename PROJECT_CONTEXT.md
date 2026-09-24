@@ -266,3 +266,14 @@ Estado validado:
 - Ya no debe pedir una segunda autenticación al llegar desde la landing.
 - Panel actual: v2.5.54.
 - Respaldo previo: `backup/pre-universal-session-handoff-2026-09-24`.
+
+## MÓDULOS COMPLETOS EN DEMO — 2026-09-24
+
+- Se detectó que `Minimarket Demo YummyPro` tenía `subscription_plan_id = null`, por lo que la RPC de acceso devolvía 0 módulos efectivos y el panel quedaba casi solo con QR/Planes.
+- `get_restaurant_subscription_access` ahora devuelve todos los módulos de la vertical cuando `is_demo = true`.
+- El panel tiene un segundo fallback: si el negocio actual es demo, `effectiveTabs()` devuelve todos los módulos definidos para Retail.
+- Retail Demo validado con la cuenta `scuentas150@gmail.com`: devuelve dashboard, cash, retail_orders, retail_pos, retail_products, retail_suppliers, retail_purchases, staff, qr, plans y settings.
+- Dashboard vuelve a ser la portada.
+- Panel Retail: v2.5.55.
+- Respaldo previo: `backup/pre-full-module-visibility-2026-09-24`.
+
