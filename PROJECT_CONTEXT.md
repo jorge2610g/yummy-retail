@@ -223,3 +223,14 @@ No se modificaron todavía módulos, textos comerciales ni estructura visual; es
 - El alta Retail ya no permite crear Restaurante o Profesional desde esta landing.
 - Estado actual de la base: Minimarket tiene Básico/Standar/Pro activos; Supermercado aún no tiene planes pagados activos.
 - Commit: `267849905095fcc0034b705f29fd58f0b249b35d`.
+
+## RESPALDOS Y CORRECCIÓN DE PLANES — 2026-09-24
+
+- Respaldo original de Restaurante verificado: `backup-original-pre-retail-2026-09-23` → commit `2610571c77c40c7ef85ffd6238aef8ecfd038171`.
+- Segundo respaldo independiente creado: `backup/original-restaurante-100pct-pre-retail-profesionales-2026-09-24` → mismo commit original.
+- Respaldo del estado actual de Retail antes de eliminar/ocultar módulos: `backup/pre-module-removal-2026-09-24`.
+- Regla operativa: no eliminar módulos/archivos sin crear o verificar respaldo previo.
+- Se corrigió en Supabase la política pública de `platform_countries`: la landing pública ahora lee únicamente países activos sin invocar `is_site_admin()`.
+- Causa del error “No pudimos cargar los planes”: la consulta de países fallaba por permisos RLS; los planes Retail seguían intactos.
+- Validación pública: países activos y planes Retail pueden leerse con rol `anon`.
+
