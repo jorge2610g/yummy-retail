@@ -22,6 +22,25 @@ Commit base de sincronización completa:
 
 No agregar ni rediseñar módulos todavía. Revisar el panel copiado y comenzar a quitar únicamente lo que no corresponde a Retail, manteniendo intacto lo común con Restaurante y Profesionales.
 
+## CLON COMPLETO DE RESTAURANTE — 2026-09-24
+
+Se amplió el punto de partida: Retail ya no contiene solo una copia del panel. También se copió la landing page y el árbol de archivos de `yummy-restaurante` necesario para reproducir exactamente la aplicación de Restaurante antes de personalizarla.
+
+Validación:
+- 30 archivos del repositorio fuente (todos salvo `CNAME`) coinciden por SHA con Retail.
+- `index.html` de Retail ahora es la landing page original de Restaurante.
+- `panel/index.html` es idéntico al panel original de Restaurante.
+- Se copiaron PWA, service worker, iconos, offline, documentación, configuración, pruebas y `panel/professional.js`.
+- El `CNAME` propio se conserva como `retail.yummypro.online`.
+- Se mantienen temporalmente `pos.html`, `scanner.html` y `supply.html` del trabajo anterior. No forman parte del clon del panel/landing y no deben eliminarse hasta recibir instrucción.
+
+Commits de sincronización completa:
+- `706b709e117fc483835a2987f5b9a76d5b367967` — landing y archivos base.
+- `68f750c13724e26b83ecac0d906bf7e78cc96f37` — panel, runtime y pruebas.
+- `7bb8e6cafe068c41849e5ebe1d52995a1bbb2249` — assets PWA.
+
+Regla actual: desplegar/revisar primero esta copia completa y solo después ocultar o eliminar módulos según instrucción explícita.
+
 ## Propósito de este archivo
 
 Este documento es el punto de continuidad oficial para retomar el trabajo de `jorge2610g/yummy-retail` cuando una conversación se corte, cambie el agente o se abra un chat nuevo.
