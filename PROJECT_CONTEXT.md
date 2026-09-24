@@ -214,3 +214,12 @@ Primer cambio posterior al clon completo.
 - Se mantienen compartidos `menu.yummypro.online` y `admin.yummypro.online` donde corresponde.
 
 No se modificaron todavía módulos, textos comerciales ni estructura visual; este cambio es únicamente de separación de dominio/acceso.
+
+## PLANES POR VERTICAL EN LANDING — 2026-09-24
+
+- Landing de Retail filtra planes por `business_type` y solo carga `supermarket` / `minimarket`.
+- Se agregó selector Retail para alternar Supermercado y Minimarket/Tienda sin mezclar planes.
+- Al elegir un plan, el formulario de registro adopta automáticamente el mismo tipo de negocio.
+- El alta Retail ya no permite crear Restaurante o Profesional desde esta landing.
+- Estado actual de la base: Minimarket tiene Básico/Standar/Pro activos; Supermercado aún no tiene planes pagados activos.
+- Commit: `267849905095fcc0034b705f29fd58f0b249b35d`.
