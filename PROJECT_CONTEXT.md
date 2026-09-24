@@ -277,3 +277,11 @@ Estado validado:
 - Panel Retail: v2.5.55.
 - Respaldo previo: `backup/pre-full-module-visibility-2026-09-24`.
 
+
+## IDENTIDAD DE PESTAÑA Y PWA — 2026-09-24
+
+- Título del navegador: `YummyPro Retail`.
+- Nombre PWA y manifiestos actualizado a la vertical Retail.
+- La vista abierta desde Admin conserva este mismo título porque el nombre está definido en el panel de esta vertical.
+- Versión del panel: `v2.5.55`.
+- Respaldo previo: `backup/pre-panel-brand-title-2026-09-24`.
