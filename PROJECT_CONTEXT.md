@@ -2,6 +2,26 @@
 
 Última actualización: 2026-09-24 (America/Santiago)
 
+## RESET DE BASE APROBADO — 2026-09-24
+
+Por instrucción del usuario, se abandonó temporalmente la estrategia de reconstruir Retail módulo por módulo.
+
+El nuevo punto de partida es:
+
+- Copiar el panel de `jorge2610g/yummy-restaurante/panel/index.html` **sin recortar módulos**.
+- Retail debe abrir primero con la misma base visual y funcional que Restaurante.
+- Solo después de confirmar que abre correctamente se eliminarán, uno por uno, los módulos que Retail no necesita.
+- Los archivos anteriores `pos.html`, `scanner.html` y `supply.html` se conservan en el historial/repositorio, pero **no son la base activa del panel raíz** en esta etapa.
+- Se copiaron también las dependencias PWA necesarias y `panel/professional.js`.
+- El `CNAME` de Retail se conserva como `retail.yummypro.online`.
+
+Commit base de sincronización completa:
+- `13e7836b3c5f58253d2d8b6f5a14e9231facc235` — Sync full restaurant panel as baseline.
+
+### Próximo paso
+
+No agregar ni rediseñar módulos todavía. Revisar el panel copiado y comenzar a quitar únicamente lo que no corresponde a Retail, manteniendo intacto lo común con Restaurante y Profesionales.
+
 ## Propósito de este archivo
 
 Este documento es el punto de continuidad oficial para retomar el trabajo de `jorge2610g/yummy-retail` cuando una conversación se corte, cambie el agente o se abra un chat nuevo.
