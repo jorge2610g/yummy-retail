@@ -234,3 +234,19 @@ No se modificaron todavía módulos, textos comerciales ni estructura visual; es
 - Causa del error “No pudimos cargar los planes”: la consulta de países fallaba por permisos RLS; los planes Retail seguían intactos.
 - Validación pública: países activos y planes Retail pueden leerse con rol `anon`.
 
+
+## VALIDACIÓN DE RUTAS Y ALTAS POR VERTICAL — 2026-09-24
+
+Respaldo previo:
+- `backup/pre-routing-demo-validation-2026-09-24`
+
+Estado validado:
+- Landing v2.0.13.
+- Panel Retail v2.5.53.
+- Landing y panel aceptan únicamente `supermarket` y `minimarket`.
+- Login, “Ir a mi panel”, confirmación de correo y alta redirigen a `https://retail.yummypro.online/panel/`.
+- “Instalar panel” usa `/panel/?install=pwa`, por lo que permanece en Retail.
+- “Ver demostración” usa el demo Retail correcto: Minimarket → `minimarket-demo-yummypro`; Supermercado → `supermercado-demo`.
+- Una cuenta Restaurante o Profesional es rechazada en la landing y en el panel Retail.
+- La prueba nueva queda `is_demo = true` y recibe la prueba predeterminada del tipo Retail seleccionado.
+
