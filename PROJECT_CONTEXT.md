@@ -250,3 +250,11 @@ Estado validado:
 - Una cuenta Restaurante o Profesional es rechazada en la landing y en el panel Retail.
 - La prueba nueva queda `is_demo = true` y recibe la prueba predeterminada del tipo Retail seleccionado.
 
+
+## LANDING UNIFICADA — 2026-09-24
+
+- La landing pública única vive en `https://web.yummypro.online/`.
+- Este repositorio conserva su panel independiente en `/panel/`.
+- La raíz del dominio redirige a la vertical correspondiente de la landing única.
+- El Admin central abre este panel según `business_type`.
+- Respaldo previo: `backup/pre-unified-landing-2026-09-24`.
