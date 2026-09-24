@@ -186,3 +186,16 @@ Después de cada cambio importante:
 ## Nota sobre memoria de conversación
 
 La memoria de una conversación no debe considerarse la fuente única de continuidad. Este archivo en GitHub debe tratarse como la referencia canónica del estado del proyecto Retail.
+
+## AUDITORÍA DE LIMPIEZA — 2026-09-24
+
+Se comparó el árbol completo contra `jorge2610g/yummy-restaurante`.
+
+Resultado final:
+- 0 archivos de código extra.
+- 0 archivos copiados con SHA distinto.
+- 0 archivos faltantes de la copia original, excluyendo el `CNAME` que debe ser propio del dominio.
+- `PROJECT_CONTEXT.md` se conserva solo como documentación de continuidad; no forma parte del runtime.
+- Se eliminaron los archivos heredados del intento anterior: `pos.html`, `scanner.html` y `supply.html`.
+
+Regla: cualquier personalización futura debe partir de esta copia limpia y hacerse solo por instrucción explícita.
