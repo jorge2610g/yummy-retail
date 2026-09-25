@@ -1,3 +1,4 @@
 YummyPro Retail staging deployment marker.
 This file exists only on the staging branch to trigger the first Vercel deployment.
 Retry marker: 2026-09-25 14:38 CLT - Retail
+Reconnect verification marker: 2026-09-25 14:45 CLT
