@@ -7,7 +7,7 @@ test('RELEASE GATE: Retail Pruebas carga correctamente desde GitHub Pages', asyn
   const serverErrors = [];
   page.on('pageerror', (error) => pageErrors.push(String(error?.message || error)));
   page.on('response', (response) => {
-    if (response.status() >= 500 && response.url().startsWith(process.env.PAGES_TEST_URL)) {
+    if (response.status() >= 500) {
       serverErrors.push(`${response.status()} ${response.url()}`);
     }
   });
@@ -17,8 +17,9 @@ test('RELEASE GATE: Retail Pruebas carga correctamente desde GitHub Pages', asyn
   await expect(page.locator('body')).not.toBeEmpty();
 
   const html = await page.content();
-  expect(html, 'Retail Pruebas debe contener la configuración de Supabase Staging').toContain('wodqqheeesrelsbacmgx');
-  expect(page.url()).toContain('/yummy-retail-pruebas/');
+  expect(html, 'Retail Pruebas debe terminar sobre configuración de Supabase Staging').toContain('wodqqheeesrelsbacmgx');
+  expect(page.url(), 'Retail Pruebas debe entrar al shell compartido con el selector Retail activo')
+    .toContain('/yummy-restaurante-pruebas/#retail');
 
   expect(pageErrors, `Errores JavaScript detectados: ${pageErrors.join(' | ')}`).toEqual([]);
   expect(serverErrors, `Errores 5xx detectados: ${serverErrors.join(' | ')}`).toEqual([]);
