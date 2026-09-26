@@ -2437,8 +2437,9 @@ body.retail-scanner-open{overflow:hidden!important}
   <div class="card">
     <div class="module-head"><div><span class="eyebrow">CATÁLOGO RETAIL</span><h2>Productos con código de barra</h2><p class="mut">Precio, costo, stock y código de barra en un solo registro.</p></div><div class="actions"><button class="ghost" type="button" onclick="openBulkCatalogImport('retail')">⬆ Carga masiva</button><button class="primary" type="button" onclick="openRetailProductModal()">＋ Producto</button><button class="ghost" type="button" onclick="loadRetailProducts()">↻ Actualizar</button></div></div>
     <div class="restaurant-metrics" style="margin-top:16px"><article class="restaurant-metric"><span>Productos activos</span><strong id="retailProductCount">0</strong></article><article class="restaurant-metric"><span>Stock bajo</span><strong id="retailLowStockCount">0</strong></article><article class="restaurant-metric"><span>Valor inventario</span><strong id="retailInventoryValue">$0</strong></article></div>
-    <label>Buscar<input id="retailProductSearch" placeholder="Nombre, marca, código o SKU" oninput="renderRetailProducts()"></label>
+    <label>Buscar<input id="retailProductSearch" placeholder="Nombre, marca, código o SKU" oninput="queueRetailProductSearch()"></label>
     <div id="retailProductList" class="list" style="margin-top:14px"></div>
+    <div id="retailProductPager" class="row between" style="margin-top:14px;gap:10px;flex-wrap:wrap"></div>
   </div>
 </section>
 
@@ -2493,6 +2494,7 @@ body.retail-scanner-open{overflow:hidden!important}
       <div class="span5">
         <label>Proveedor<select id="retailPurchaseSupplier"><option value="">Sin proveedor</option></select></label>
         <label>N.º documento / factura<input id="retailPurchaseDocument"></label>
+        <label>Buscar producto<input id="retailPurchaseProductSearch" placeholder="Nombre, código, SKU o marca" oninput="queueRetailPurchaseProductSearch(this.value)"></label>
         <div class="two"><div><label>Producto<select id="retailPurchaseProduct"></select></label></div><div><label>Cantidad<input id="retailPurchaseQty" type="number" min="0.001" step="0.001" value="1"></label></div></div>
         <label>Costo unitario<input id="retailPurchaseCost" type="number" min="0" step="0.01" value="0"></label>
         <button class="ghost full" type="button" onclick="addRetailPurchaseItem()">＋ Agregar a compra</button>
@@ -2828,7 +2830,7 @@ function panelBusinessTypeAllowed(type){return PANEL_ALLOWED_BUSINESS_TYPES.incl
 function applyAdminTheme(theme){document.documentElement.dataset.theme=theme;localStorage.setItem("admin_theme",theme);const b=document.getElementById("themeBtn");if(b){const next=theme==="dark"?"claro":"oscuro",icon=theme==="dark"?"☀️":"🌙";b.innerHTML='<span class="header-action-icon" aria-hidden="true">'+icon+'</span><span class="action-label">Modo '+next+'</span>';b.setAttribute("aria-label","Activar modo "+next);b.title="Activar modo "+next}}
 function toggleAdminTheme(){applyAdminTheme(document.documentElement.dataset.theme==="light"?"dark":"light")}
 applyAdminTheme(localStorage.getItem("admin_theme")||"dark");setTimeout(bindRestaurantMpButtons,0);
-let categories=[],products=[],orders=[],restaurants=[],subscriptionPlans=[],inventoryItems=[],inventoryMovements=[],cashMovements=[],cashSessions=[],cashSession=null,staffMembers=[],staffDirectory=[],productOptionGroups=[],productOptions=[],platformCountries=[],alternativePaymentMethods=[],restaurantTables=[],tableQrCashOrders=[],counterQrReadyOrders=[],cashPaidOrders=[],restaurantPromotions=[],restaurantReviews=[],subscriptionPayments=[],flowPaymentConfigured=false,flowPaymentEnvironment="sandbox",veripagosSubscriptionConfigured=false,veripagosRestaurantConfigured=false,currentRestaurant=null,currentRestaurantConfig=null,currentRole="restaurant",currentUserId=null,posCart={},posCashOpen=false,subscriptionFxRates={},posOrders=[],posCategories=[],posTables=[],qrReadyOrders=[],paidQrOrders=[],posCategoryFilter="",posEditCategoryFilter="",posOrderDateFilter="today",posOrderView="active",paidQrView="pending",cashDateFilter="today",cashPaidOrderDateFilter="today",cashPaidWaiterFilter="all",inventoryDateFilter="today",cashSaleProducts=[],cashSaleCart={},cashierOrders=[],retailProducts=[],retailSuppliers=[],retailSales=[],retailPurchases=[],retailPosCart={},retailPurchaseCart=[],retailCashSession=null,retailOnlineOrders=[],retailOrderFilter="active",retailOnlineOrdersChannel=null,retailOnlineOrdersChannelRestaurant=null,retailScannerStream=null,retailScannerDetector=null,retailHtml5Scanner=null,retailScannerActive=false,retailScannerLastCode="",retailScannerLastAt=0,retailScannerMode="pos",retailScannerCheckoutOpen=false,retailReturnContext=null;
+let categories=[],products=[],orders=[],restaurants=[],subscriptionPlans=[],inventoryItems=[],inventoryMovements=[],cashMovements=[],cashSessions=[],cashSession=null,staffMembers=[],staffDirectory=[],productOptionGroups=[],productOptions=[],platformCountries=[],alternativePaymentMethods=[],restaurantTables=[],tableQrCashOrders=[],counterQrReadyOrders=[],cashPaidOrders=[],restaurantPromotions=[],restaurantReviews=[],subscriptionPayments=[],flowPaymentConfigured=false,flowPaymentEnvironment="sandbox",veripagosSubscriptionConfigured=false,veripagosRestaurantConfigured=false,currentRestaurant=null,currentRestaurantConfig=null,currentRole="restaurant",currentUserId=null,posCart={},posCashOpen=false,subscriptionFxRates={},posOrders=[],posCategories=[],posTables=[],qrReadyOrders=[],paidQrOrders=[],posCategoryFilter="",posEditCategoryFilter="",posOrderDateFilter="today",posOrderView="active",paidQrView="pending",cashDateFilter="today",cashPaidOrderDateFilter="today",cashPaidWaiterFilter="all",inventoryDateFilter="today",cashSaleProducts=[],cashSaleCart={},cashierOrders=[],retailProducts=[],retailSuppliers=[],retailSales=[],retailPurchases=[],retailPosCart={},retailPurchaseCart=[],retailPurchaseSearchRows=[],retailCashSession=null,retailOnlineOrders=[],retailOrderFilter="active",retailOnlineOrdersChannel=null,retailOnlineOrdersChannelRestaurant=null,retailScannerStream=null,retailScannerDetector=null,retailHtml5Scanner=null,retailScannerActive=false,retailScannerLastCode="",retailScannerLastAt=0,retailScannerMode="pos",retailScannerCheckoutOpen=false,retailReturnContext=null,retailProductPage=1,retailProductTotal=0,retailProductPageSize=50,retailProductSearchTimer=null,retailPurchaseProductSearchTimer=null,retailProductMetrics={active_count:0,low_stock_count:0,inventory_value:0};
 const REST_TELEMETRY_KEY="yummy_restaurant_telemetry_session_v1";
 function restaurantTelemetrySession(){try{let v=localStorage.getItem(REST_TELEMETRY_KEY);if(!v){v=(crypto.randomUUID?.()||Date.now()+"-"+Math.random().toString(16).slice(2));localStorage.setItem(REST_TELEMETRY_KEY,v)}return v}catch(_){return "restaurant-"+Date.now()}}
 async function trackRestaurantEvent(eventName,module=null,metadata={},planId=null){try{await sb.rpc("log_app_event",{p_app_context:"restaurant",p_event_name:eventName,p_module:module,p_restaurant_id:currentRestaurant||null,p_plan_id:planId||null,p_session_id:restaurantTelemetrySession(),p_route:location.pathname+location.search,p_metadata:metadata||{}})}catch(_){}}
@@ -3728,25 +3730,52 @@ function syncRestaurantHeader(r){
 
 function retailLabel(){return currentBusinessType()==="supermarket"?"Supermercado":"Minimarket"}
 function retailQty(v){return Number(v||0).toLocaleString(currentRestaurantConfig?.locale||"es-CL",{maximumFractionDigits:3})}
-async function loadRetailProducts(){
+function queueRetailProductSearch(){
+ clearTimeout(retailProductSearchTimer);
+ retailProductSearchTimer=setTimeout(()=>{retailProductPage=1;loadRetailProducts().catch(e=>console.error("Retail products",e))},250)
+}
+async function setRetailProductPage(page){
+ retailProductPage=Math.max(1,Number(page)||1);
+ await loadRetailProducts()
+}
+async function loadRetailProducts(resetPage=false){
  if(!currentRestaurant)return;
- const {data,error}=await sb.from("retail_products").select("*").eq("restaurant_id",currentRestaurant).order("active",{ascending:false}).order("name");
+ if(resetPage)retailProductPage=1;
+ const search=String(document.getElementById("retailProductSearch")?.value||"").trim();
+ const {data,error}=await sb.rpc("retail_product_directory_page",{
+  p_restaurant_id:currentRestaurant,
+  p_limit:retailProductPageSize,
+  p_offset:(retailProductPage-1)*retailProductPageSize,
+  p_search:search||null
+ });
  if(error){console.error(error);toast("No se pudieron cargar los productos retail");return}
- retailProducts=data||[];
+ const payload=data||{};
+ retailProducts=Array.isArray(payload.rows)?payload.rows:[];
+ retailProductTotal=Number(payload.total||0);
+ retailProductMetrics={
+   active_count:Number(payload.active_count||0),
+   low_stock_count:Number(payload.low_stock_count||0),
+   inventory_value:Number(payload.inventory_value||0)
+ };
+ const pages=Math.max(1,Math.ceil(retailProductTotal/retailProductPageSize));
+ if(retailProductPage>pages){retailProductPage=pages;return loadRetailProducts()}
  renderRetailProducts();
+}
+function renderRetailProductPager(){
+ const pager=document.getElementById("retailProductPager");if(!pager)return;
+ const pages=Math.max(1,Math.ceil(retailProductTotal/retailProductPageSize)),from=retailProductTotal?(retailProductPage-1)*retailProductPageSize+1:0,to=Math.min(retailProductPage*retailProductPageSize,retailProductTotal);
+ pager.innerHTML='<span class="mut">Mostrando '+from+'–'+to+' de '+retailProductTotal+'</span><div class="actions"><button class="ghost" type="button" '+(retailProductPage<=1?'disabled':'')+' onclick="setRetailProductPage('+(retailProductPage-1)+')">← Anterior</button><span class="pill">Página '+retailProductPage+' de '+pages+'</span><button class="ghost" type="button" '+(retailProductPage>=pages?'disabled':'')+' onclick="setRetailProductPage('+(retailProductPage+1)+')">Siguiente →</button></div>';
 }
 function renderRetailProducts(){
  const list=document.getElementById("retailProductList");if(!list)return;
- const q=String(document.getElementById("retailProductSearch")?.value||"").trim().toLowerCase();
- const rows=retailProducts.filter(p=>!q||[p.name,p.brand,p.category,p.barcode,p.sku].some(v=>String(v||"").toLowerCase().includes(q)));
- const active=retailProducts.filter(p=>p.active),low=active.filter(p=>Number(p.current_stock)<=Number(p.minimum_stock));
- const value=retailProducts.reduce((a,p)=>a+Number(p.current_stock||0)*Number(p.cost||0),0);
+ const rows=retailProducts;
  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
- set("retailProductCount",active.length);set("retailLowStockCount",low.length);set("retailInventoryValue",money(value));
+ set("retailProductCount",retailProductMetrics.active_count);set("retailLowStockCount",retailProductMetrics.low_stock_count);set("retailInventoryValue",money(retailProductMetrics.inventory_value));
  list.innerHTML=rows.map(p=>{
   const lowStock=p.active&&Number(p.current_stock)<=Number(p.minimum_stock);
   return '<article class="item"><div class="row between"><div><div class="row" style="gap:7px;flex-wrap:wrap"><span class="pill">'+esc(p.category||"Sin categoría")+'</span>'+(p.barcode?'<span class="pill">▥ '+esc(p.barcode)+'</span>':'')+(p.sku?'<span class="pill">SKU '+esc(p.sku)+'</span>':'')+'</div><h3 style="margin:9px 0 4px">'+esc(p.name)+'</h3><div class="mut">'+(p.brand?esc(p.brand)+' · ':'')+'Costo '+money(p.cost)+' · Venta '+money(p.price)+'</div><div style="margin-top:6px"><b>Stock: '+retailQty(p.current_stock)+' '+esc(p.unit||"unidad")+'</b> · mínimo '+retailQty(p.minimum_stock)+'</div>'+(lowStock?'<div style="color:var(--bad);font-weight:800;margin-top:5px">⚠ Stock bajo</div>':!p.active?'<div class="mut" style="margin-top:5px">Producto desactivado</div>':'')+'</div><div class="actions"><button class="ghost" type="button" onclick="editRetailProduct('+p.id+')">Editar</button><button class="ghost" type="button" onclick="adjustRetailProductStock('+p.id+')">Ajustar stock</button></div></div></article>'
  }).join("")||'<p class="mut">No hay productos que coincidan.</p>';
+ renderRetailProductPager();
 }
 function openRetailProductModal(){
  const g=id=>document.getElementById(id);
@@ -3817,10 +3846,22 @@ async function saveRetailSupplier(){
  if(result.error)return toast(result.error.message);closeRetailSupplierModal();await loadRetailSuppliers();toast("Proveedor guardado")
 }
 
+function queueRetailPurchaseProductSearch(value){
+ clearTimeout(retailPurchaseProductSearchTimer);
+ retailPurchaseProductSearchTimer=setTimeout(()=>loadRetailPurchaseProductOptions(value).catch(e=>console.error("Retail purchase products",e)),250)
+}
+async function loadRetailPurchaseProductOptions(search=""){
+ if(!currentRestaurant)return;
+ const {data,error}=await sb.rpc("retail_product_directory_page",{p_restaurant_id:currentRestaurant,p_limit:50,p_offset:0,p_search:String(search||"").trim()||null});
+ if(error)return toast("No se pudieron buscar productos");
+ retailPurchaseSearchRows=(data?.rows||[]).filter(x=>x.active);
+ const merged=new Map(retailProducts.map(x=>[Number(x.id),x]));retailPurchaseSearchRows.forEach(x=>merged.set(Number(x.id),x));retailProducts=[...merged.values()];
+ syncRetailPurchaseSelectors()
+}
 function syncRetailPurchaseSelectors(){
  const supplier=document.getElementById("retailPurchaseSupplier"),product=document.getElementById("retailPurchaseProduct");
  if(supplier){const selected=supplier.value;supplier.innerHTML='<option value="">Sin proveedor</option>'+retailSuppliers.filter(x=>x.active).map(x=>'<option value="'+x.id+'">'+esc(x.name)+'</option>').join("");supplier.value=selected}
- if(product){const selected=product.value;product.innerHTML=retailProducts.filter(x=>x.active).map(x=>'<option value="'+x.id+'">'+esc(x.name)+(x.barcode?" · "+esc(x.barcode):"")+'</option>').join("");product.value=selected&&retailProducts.some(x=>String(x.id)===String(selected))?selected:(product.options[0]?.value||"");product.onchange=()=>{const p=retailProducts.find(x=>String(x.id)===String(product.value));const c=document.getElementById("retailPurchaseCost");if(c&&p)c.value=Number(p.cost||0)};product.onchange()}
+ if(product){const selected=product.value,rows=retailPurchaseSearchRows.length?retailPurchaseSearchRows:retailProducts.filter(x=>x.active).slice(0,50);product.innerHTML=rows.map(x=>'<option value="'+x.id+'">'+esc(x.name)+(x.barcode?" · "+esc(x.barcode):"")+'</option>').join("");product.value=selected&&rows.some(x=>String(x.id)===String(selected))?selected:(product.options[0]?.value||"");product.onchange=()=>{const p=retailProducts.find(x=>String(x.id)===String(product.value));const c=document.getElementById("retailPurchaseCost");if(c&&p)c.value=Number(p.cost||0)};product.onchange()}
 }
 function addRetailPurchaseItem(){
  const productId=Number(document.getElementById("retailPurchaseProduct")?.value),qty=Number(document.getElementById("retailPurchaseQty")?.value||0),cost=Number(document.getElementById("retailPurchaseCost")?.value||0),p=retailProducts.find(x=>Number(x.id)===productId);
@@ -3836,7 +3877,7 @@ function renderRetailPurchaseCart(){
 }
 async function loadRetailPurchases(){
  if(!currentRestaurant)return;
- await Promise.allSettled([loadRetailProducts(),loadRetailSuppliers()]);
+ await Promise.allSettled([loadRetailSuppliers(),loadRetailPurchaseProductOptions(document.getElementById("retailPurchaseProductSearch")?.value||"")]);
  const {data,error}=await sb.from("retail_purchases").select("*").eq("restaurant_id",currentRestaurant).order("created_at",{ascending:false}).limit(50);
  if(error){console.error(error);return toast("No se pudieron cargar las compras")}
  retailPurchases=data||[];syncRetailPurchaseSelectors();renderRetailPurchaseCart();
@@ -3963,14 +4004,13 @@ async function autoOpenRetailPosScanner(){
 }
 async function loadRetailPos(){
  if(!currentRestaurant)return;
- const [productsResult,salesResult,cashResult]=await Promise.all([
-  sb.from("retail_products").select("*").eq("restaurant_id",currentRestaurant).eq("active",true).order("name"),
+ const [salesResult,cashResult]=await Promise.all([
   sb.from("retail_sales").select("id,sale_code,subtotal,discount,total,amount_received,change_amount,payment_method,customer_name,created_at,status,refunded_amount,refund_status").eq("restaurant_id",currentRestaurant).order("created_at",{ascending:false}).limit(30),
   sb.from("restaurant_cash_sessions").select("*").eq("restaurant_id",currentRestaurant).eq("status","open").order("opened_at",{ascending:false}).limit(1)
  ]);
- if(productsResult.error)return toast(productsResult.error.message);
- retailProducts=productsResult.data||[];retailSales=salesResult.data||[];retailCashSession=cashResult.data?.[0]||null;
- const scanStatus=document.getElementById("retailPosScanStatus");if(scanStatus)scanStatus.textContent=retailProducts.length?retailProducts.length+" productos activos cargados. Escanea un código de barra o SKU para agregarlo al carrito.":"No hay productos activos disponibles. Crea o activa productos en Productos e inventario.";
+ if(salesResult.error)return toast(salesResult.error.message);
+ retailSales=salesResult.data||[];retailCashSession=cashResult.data?.[0]||null;
+ const scanStatus=document.getElementById("retailPosScanStatus");if(scanStatus)scanStatus.textContent="Escanea un código de barra o SKU. El producto se consulta al instante sin descargar todo el catálogo.";
  const warning=document.getElementById("retailCashWarning");
  if(warning)warning.innerHTML=retailCashSession?'<div class="row between"><div><b>🟢 Caja abierta</b><div class="mut">Sesión #'+retailCashSession.id+' · lista para vender</div></div><button class="ghost" type="button" onclick="document.querySelector(\'.tab[data-tab=&quot;cash&quot;]\')?.click()">Ver caja</button></div>':'<div class="row between"><div><b>🔴 Caja cerrada</b><div class="mut">Abre una caja antes de registrar ventas o devoluciones.</div></div><button class="primary" type="button" onclick="document.querySelector(\'.tab[data-tab=&quot;cash&quot;]\')?.click()">Abrir caja</button></div>';
  const recent=document.getElementById("retailRecentSales");
@@ -3995,13 +4035,14 @@ function retailProductMatchesCode(product,code){
  const wanted=new Set(retailCodeKeys(code));
  return [product?.barcode,product?.sku].some(value=>retailCodeKeys(value).some(key=>wanted.has(key)))
 }
-async function refreshRetailPosProducts(){
- if(!currentRestaurant)return [];
- const {data,error}=await sb.from("retail_products").select("*").eq("restaurant_id",currentRestaurant).eq("active",true).order("name");
- if(error){console.error("No se pudieron refrescar los productos POS",error);return retailProducts}
- retailProducts=data||[];
- const scanStatus=document.getElementById("retailPosScanStatus");if(scanStatus)scanStatus.textContent=retailProducts.length?retailProducts.length+" productos activos cargados. Escanea un código de barra o SKU para agregarlo al carrito.":"No hay productos activos disponibles. Crea o activa productos en Productos e inventario.";
- return retailProducts
+async function lookupRetailPosProduct(code){
+ if(!currentRestaurant||!code)return null;
+ const {data,error}=await sb.rpc("retail_product_lookup_code",{p_restaurant_id:currentRestaurant,p_code:String(code).trim()});
+ if(error){console.error("No se pudo consultar el producto POS",error);return null}
+ if(!data)return null;
+ const idx=retailProducts.findIndex(x=>Number(x.id)===Number(data.id));
+ if(idx>=0)retailProducts[idx]=data;else retailProducts.push(data);
+ return data
 }
 function addRetailProductToCart(p){
  if(!p)return false;
@@ -4021,10 +4062,7 @@ function addRetailProductToCart(p){
 async function retailAddCode(code,fromCamera=false){
  code=String(code||"").trim();if(!code)return false;
  let p=retailProducts.find(x=>retailProductMatchesCode(x,code));
- if(!p){
-  await refreshRetailPosProducts();
-  p=retailProducts.find(x=>retailProductMatchesCode(x,code))
- }
+ if(!p)p=await lookupRetailPosProduct(code);
  if(!p){
   const msg="Código "+code+" no registrado en este "+currentBusinessLabel().toLowerCase()+". Créalo en Productos e inventario.";
   const status=document.getElementById("retailPosScanStatus");if(status)status.textContent="⚠ "+msg;
@@ -4038,12 +4076,14 @@ async function retailScanBarcode(){
  const ok=await retailAddCode(code,false);if(input){if(ok)input.value="";else input.select();input.focus()}
 }
 function openRetailProductBarcodeCamera(){openRetailBarcodeCamera("product")}
-function applyScannedRetailProductCode(code){
+async function applyScannedRetailProductCode(code){
  const input=document.getElementById("retailProductBarcode"),currentId=Number(document.getElementById("retailProductId")?.value)||null;
  if(!input)return false;
- const existing=retailProducts.find(p=>retailProductMatchesCode(p,code)&&Number(p.id)!==Number(currentId));
- if(existing){
+ let existing=retailProducts.find(p=>retailProductMatchesCode(p,code)&&Number(p.id)!==Number(currentId));
+ if(!existing)existing=await lookupRetailPosProduct(code);
+ if(existing&&Number(existing.id)!==Number(currentId)){
   closeRetailBarcodeCamera(false);
+  retailProductPage=1;document.getElementById("retailProductSearch").value=existing.barcode||existing.sku||existing.name;await loadRetailProducts();
   editRetailProduct(existing.id);
   toast("Ese código ya pertenece a "+existing.name+". Abrimos el producto existente.");
   return true
@@ -4094,7 +4134,7 @@ async function handleRetailCameraCode(raw,status){
  if(retailScannerMode==="product"){
   if(status)status.innerHTML='✅ Código detectado: <b>'+esc(code)+'</b>';
   playRetailScanBeep();
-  applyScannedRetailProductCode(code);
+  await applyScannedRetailProductCode(code);
   return
  }
  const ok=await retailAddCode(code,true),product=retailProducts.find(x=>retailProductMatchesCode(x,code));
@@ -6271,7 +6311,7 @@ window.saveOrderDetail=async function(){const old=orders.find(x=>Number(x.id)===
     <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="ghost" type="button" onclick="restaurantIssueDialog.close()">Cancelar</button><button class="primary" type="button" onclick="submitRestaurantIssueReport()">Enviar reporte</button></div>
   </div>
 </dialog>
-<footer class="admin-version">Retail · Versión v2.5.70</footer></main></div><script>
+<footer class="admin-version">Retail · Versión v2.5.71</footer></main></div><script>
 async function verifySubscriptionMercadoPago(){
  const box=document.getElementById("subscriptionMpStatus");
  if(!box)return;
