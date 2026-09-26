@@ -94,3 +94,5 @@ for(const forbidden of ['else if(payload?.access_token&&payload?.refresh_token)'
 for(const m of ['isPagesPruebas','https://jorge2610g.github.io/yummy-restaurante-pruebas/#retail','https://web.yummypro.online/#retail'])if(!landing.includes(m))throw new Error('index.html: falta redirect seguro retail '+m);
 
 for(const marker of ['YUMMY_CLIENT_BASE','yummy-cliente-pruebas','YUMMY_ADMIN_BASE','yummy-admin-pruebas'])if(!panel.includes(marker))throw new Error('panel/index.html: falta enrutamiento de Pruebas '+marker);
+
+for(const marker of ['id="swhiteLabel"','white_label_enabled','Marca blanca','PLUS'])if(!panel.includes(marker))throw new Error('panel/index.html: falta Marca blanca '+marker);
