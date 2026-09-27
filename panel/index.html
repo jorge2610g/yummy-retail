@@ -1956,7 +1956,33 @@ body.retail-scanner-open{overflow:hidden!important}
     overflow-x:hidden!important;
   }
 }
-</style></head>
+</style><style id="yummypro-retail-sidebar-auditor-fix-v2572">
+@media(min-width:801px){
+  #sideMenu.collapsed .nav-label,
+  #sideMenu.collapsed .sidebar-brand-name,
+  #sideMenu.collapsed .side-menu-title{
+    display:none!important;
+    width:0!important;
+    max-width:0!important;
+    overflow:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+  #sideMenu.collapsed .tab{
+    width:36px!important;
+    min-width:36px!important;
+    max-width:36px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    padding:0!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  #app:not(.sidebar-collapsed) #restaurantIssueButton{left:260px!important;right:auto!important}
+  #app.sidebar-collapsed #restaurantIssueButton{left:82px!important;right:auto!important}
+}
+</style>
+</head>
 <body class="auth-loading">
 <style>
 #app{display:none!important}.auth-ready #app:not(.hidden){display:block!important}.auth-loading #login,.auth-loading #app{display:none!important}
@@ -3112,7 +3138,7 @@ function syncBusinessTypeUi(){
  if(retail){
   setNavTabLabel("retail_orders","Pedidos Online","Pedidos Online · "+label);
   setNavTabLabel("retail_pos","POS "+label,"Punto de venta · "+label);
-  setNavTabLabel("retail_products","Productos e inventario","Productos e inventario · "+label);
+  setNavTabLabel("retail_products","Productos / stock","Productos e inventario · "+label);
   setNavTabLabel("retail_suppliers","Proveedores","Proveedores · "+label);
   setNavTabLabel("retail_purchases","Compras","Compras · "+label);
  }else{
@@ -6315,7 +6341,7 @@ window.saveOrderDetail=async function(){const old=orders.find(x=>Number(x.id)===
     <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="ghost" type="button" onclick="restaurantIssueDialog.close()">Cancelar</button><button class="primary" type="button" onclick="submitRestaurantIssueReport()">Enviar reporte</button></div>
   </div>
 </dialog>
-<footer class="admin-version">Retail · Versión v2.5.71</footer></main></div><script>
+<footer class="admin-version">Retail · Versión v2.5.73</footer></main></div><script>
 async function verifySubscriptionMercadoPago(){
  const box=document.getElementById("subscriptionMpStatus");
  if(!box)return;
