@@ -3138,7 +3138,7 @@ function syncBusinessTypeUi(){
  if(retail){
   setNavTabLabel("retail_orders","Pedidos Online","Pedidos Online · "+label);
   setNavTabLabel("retail_pos","POS "+label,"Punto de venta · "+label);
-  setNavTabLabel("retail_products","Productos e inventario","Productos e inventario · "+label);
+  setNavTabLabel("retail_products","Productos / stock","Productos e inventario · "+label);
   setNavTabLabel("retail_suppliers","Proveedores","Proveedores · "+label);
   setNavTabLabel("retail_purchases","Compras","Compras · "+label);
  }else{
@@ -6341,7 +6341,7 @@ window.saveOrderDetail=async function(){const old=orders.find(x=>Number(x.id)===
     <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="ghost" type="button" onclick="restaurantIssueDialog.close()">Cancelar</button><button class="primary" type="button" onclick="submitRestaurantIssueReport()">Enviar reporte</button></div>
   </div>
 </dialog>
-<footer class="admin-version">Retail · Versión v2.5.72</footer></main></div><script>
+<footer class="admin-version">Retail · Versión v2.5.73</footer></main></div><script>
 async function verifySubscriptionMercadoPago(){
  const box=document.getElementById("subscriptionMpStatus");
  if(!box)return;
