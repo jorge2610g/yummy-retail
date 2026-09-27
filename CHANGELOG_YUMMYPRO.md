@@ -1,3 +1,8 @@
+## 2.5.72 — 2026-09-27 — Pruebas
+- Se corrigió el menú lateral contraído de Retail: las etiquetas ya no sobresalen fuera de la barra.
+- El botón “Reportar problema” queda fuera del menú lateral tanto expandido como contraído.
+- Producción no fue modificada.
+
 # Changelog YummyPro — Retail
 
 ## 2026-09-26 — 2.5.69 — Pruebas
