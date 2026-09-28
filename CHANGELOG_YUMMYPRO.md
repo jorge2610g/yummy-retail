@@ -1,3 +1,7 @@
+## 2.5.74 — 2026-09-28 — Pruebas
+- Tras verificar DNS, el panel inicia el aprovisionamiento seguro del hostname y SSL en backend.
+- Producción no fue modificada.
+
 ## 2.5.73 — 2026-09-27 — Pruebas
 - Se compactó la etiqueta del módulo Retail “Productos / stock” manteniendo el tooltip completo “Productos e inventario”.
 - El menú expandido ya no desborda en escritorio cuando se usa el nicho Supermercado.
